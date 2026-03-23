@@ -293,6 +293,7 @@ function setupCanvasEvents() {
     const canvas = document.getElementById('mainChart');
     if (!canvas) return;
 
+    // Desktop hover
     canvas.addEventListener('mousemove', (e) => {
         if (!chart) return;
         const rect = canvas.getBoundingClientRect();
@@ -327,7 +328,6 @@ function setupCanvasEvents() {
     const popupEl = document.getElementById('annotationPopup');
     if (popupEl) {
         popupEl.addEventListener('mouseleave', (e) => {
-            const canvas = document.getElementById('mainChart');
             if (e.relatedTarget === canvas) return;
             if (hoveredEventId) {
                 hoveredEventId = null;
@@ -336,40 +336,42 @@ function setupCanvasEvents() {
             }
         });
     }
+}
 
-    // Tap/click toggles popup
-    function handleTap(clientX, clientY) {
-        if (!chart) return;
-        const rect = canvas.getBoundingClientRect();
-        const x = clientX - rect.left;
-        const y = clientY - rect.top;
+// Create invisible DOM tap targets over each flag (works on mobile)
+function updateFlagTapTargets() {
+    const wrapper = document.querySelector('.chart-wrapper');
+    const canvas = document.getElementById('mainChart');
+    if (!wrapper || !canvas || !chart) return;
 
-        const found = isNearFlag(x, y);
-        if (found) {
-            if (hoveredEventId === found.id) {
+    // Remove old targets
+    wrapper.querySelectorAll('.flag-tap-target').forEach(el => el.remove());
+
+    const canvasRect = canvas.getBoundingClientRect();
+    const wrapperRect = wrapper.getBoundingClientRect();
+    const canvasLeft = canvasRect.left - wrapperRect.left;
+    const canvasTop = canvasRect.top - wrapperRect.top;
+    const xScale = chart.scales.x;
+    if (!xScale) return;
+
+    const flagY = canvasTop + xScale.bottom + 4;
+
+    eventPixelPositions.forEach(ep => {
+        const btn = document.createElement('div');
+        btn.className = 'flag-tap-target';
+        btn.style.cssText = `position:absolute; left:${canvasLeft + ep.xPos - 18}px; top:${flagY - 4}px; width:36px; height:28px; z-index:5; cursor:pointer;`;
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (hoveredEventId === ep.id) {
                 hoveredEventId = null;
                 hidePopup();
             } else {
-                hoveredEventId = found.id;
-                showPopup(found.xPos, found.title, found.description, found.color, found.url);
+                hoveredEventId = ep.id;
+                showPopup(ep.xPos, ep.title, ep.description, ep.color, ep.url);
             }
-            chart.draw();
-        } else {
-            if (hoveredEventId) {
-                hoveredEventId = null;
-                hidePopup();
-                chart.draw();
-            }
-        }
-    }
-
-    canvas.addEventListener('click', (e) => handleTap(e.clientX, e.clientY));
-
-    canvas.addEventListener('touchend', (e) => {
-        const touch = e.changedTouches[0];
-        if (touch) {
-            handleTap(touch.clientX, touch.clientY);
-        }
+            if (chart) chart.draw();
+        });
+        wrapper.appendChild(btn);
     });
 }
 
@@ -483,6 +485,9 @@ function renderChart() {
             scales,
         },
     });
+
+    // Update DOM tap targets after chart renders
+    requestAnimationFrame(() => updateFlagTapTargets());
 }
 
 function updateTimestamp() {
