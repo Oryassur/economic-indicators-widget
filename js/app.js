@@ -420,7 +420,7 @@ function updateFlagTapTargets() {
 function renderChart() {
     if (!metricsData) return;
 
-    const use3hAvg = timeRange === 'all' || timeRange === '7d';
+    const use3hAvg = false;
     const datasets = [];
     const scales = {
         x: {
