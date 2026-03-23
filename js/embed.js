@@ -337,12 +337,12 @@ function setupCanvasEvents() {
         });
     }
 
-    // Click toggles popup (for mobile tap support)
-    canvas.addEventListener('click', (e) => {
+    // Tap/click toggles popup
+    function handleTap(clientX, clientY) {
         if (!chart) return;
         const rect = canvas.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
+        const x = clientX - rect.left;
+        const y = clientY - rect.top;
 
         const found = isNearFlag(x, y);
         if (found) {
@@ -360,6 +360,15 @@ function setupCanvasEvents() {
                 hidePopup();
                 chart.draw();
             }
+        }
+    }
+
+    canvas.addEventListener('click', (e) => handleTap(e.clientX, e.clientY));
+
+    canvas.addEventListener('touchend', (e) => {
+        const touch = e.changedTouches[0];
+        if (touch) {
+            handleTap(touch.clientX, touch.clientY);
         }
     });
 }
