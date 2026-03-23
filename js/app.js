@@ -798,6 +798,78 @@ function renderMetricDescFields() {
     });
 }
 
+// --- Publish to GitHub ---
+
+const GITHUB_REPO = 'Oryassur/economic-indicators-widget';
+const GITHUB_FILE = 'data/events.json';
+const TOKEN_KEY = 'github_pat';
+
+function getGitHubToken() {
+    let token = localStorage.getItem(TOKEN_KEY);
+    if (!token) {
+        token = prompt('הזן GitHub Personal Access Token (עם הרשאת repo).\nצור ב: github.com/settings/tokens');
+        if (token) localStorage.setItem(TOKEN_KEY, token.trim());
+    }
+    return token;
+}
+
+async function publishToGitHub() {
+    const statusEl = document.getElementById('publishStatus');
+    const btn = document.getElementById('publishBtn');
+    const token = getGitHubToken();
+    if (!token) {
+        statusEl.textContent = 'בוטל — לא הוזן טוקן';
+        return;
+    }
+
+    btn.disabled = true;
+    statusEl.textContent = 'שומר...';
+    statusEl.style.color = '#f59e0b';
+
+    try {
+        // Get current file SHA (required for update)
+        const getRes = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${GITHUB_FILE}`, {
+            headers: { Authorization: `token ${token}` }
+        });
+        if (!getRes.ok) throw new Error('שגיאה בקריאת הקובץ — בדוק טוקן');
+        const fileData = await getRes.json();
+
+        // Build updated content
+        const content = JSON.stringify(buildFullJson(), null, 2) + '\n';
+        const encoded = btoa(unescape(encodeURIComponent(content)));
+
+        // Commit the update
+        const putRes = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${GITHUB_FILE}`, {
+            method: 'PUT',
+            headers: {
+                Authorization: `token ${token}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                message: 'update events and texts from editor',
+                content: encoded,
+                sha: fileData.sha,
+            }),
+        });
+
+        if (!putRes.ok) {
+            const err = await putRes.json();
+            throw new Error(err.message || 'שגיאה בשמירה');
+        }
+
+        statusEl.textContent = 'נשמר ופורסם בהצלחה ✓';
+        statusEl.style.color = '#22c55e';
+        setTimeout(() => { statusEl.textContent = ''; }, 5000);
+    } catch (e) {
+        statusEl.textContent = e.message;
+        statusEl.style.color = '#ef4444';
+        // Clear bad token if auth failed
+        if (e.message.includes('טוקן')) localStorage.removeItem(TOKEN_KEY);
+    } finally {
+        btn.disabled = false;
+    }
+}
+
 // Init
 document.addEventListener('DOMContentLoaded', async () => {
     await Promise.all([loadData(), loadEvents()]);
@@ -806,6 +878,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     setupCanvasEvents();
     setupEditor();
     setupTextEditor();
+    document.getElementById('publishBtn')?.addEventListener('click', publishToGitHub);
     renderChart();
     updateMetricDescriptions();
     updateTimestamp();
