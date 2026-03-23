@@ -309,23 +309,6 @@ function showPopup(canvasXPos, title, description, color, url) {
     }
 
     popup.style.display = 'block';
-
-    const wrapperRect = wrapper.getBoundingClientRect();
-    const canvasRect = canvas.getBoundingClientRect();
-    const canvasLeft = canvasRect.left - wrapperRect.left;
-    const canvasTop = canvasRect.top - wrapperRect.top;
-
-    const popupWidth = popup.offsetWidth || 280;
-    let left = canvasLeft + canvasXPos - popupWidth / 2;
-    left = Math.max(8, Math.min(left, wrapperRect.width - popupWidth - 8));
-    popup.style.left = left + 'px';
-
-    // Position below the flags
-    if (chart && chart.scales.x) {
-        const flagBottom = canvasTop + chart.scales.x.bottom + 30;
-        popup.style.top = flagBottom + 'px';
-        popup.style.bottom = 'auto';
-    }
 }
 
 function hidePopup() {
