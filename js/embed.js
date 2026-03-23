@@ -283,9 +283,8 @@ function showPopup(canvasXPos, title, description, color, url) {
     popup.style.left = left + 'px';
 
     if (chart && chart.scales.x) {
-        const flagTop = canvasTop + chart.scales.x.bottom;
-        const popupHeight = popup.offsetHeight || 120;
-        popup.style.top = (flagTop - popupHeight - 4) + 'px';
+        const flagBottom = canvasTop + chart.scales.x.bottom + 30;
+        popup.style.top = flagBottom + 'px';
         popup.style.bottom = 'auto';
     }
 }
