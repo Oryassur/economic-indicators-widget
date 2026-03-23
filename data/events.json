@@ -1,5 +1,5 @@
 {
-  "title": "מעקב מדדים כלכליים",
+  "title": "מלחמת הכלכלה העולמית",
   "subtitle": "עימות ארה״ב-ישראל / איראן — החל מ-23 בפברואר 2026",
   "description": "מעקב אחר מדדים כלכליים מרכזיים בתקופת העימות בין ארה״ב-ישראל לאיראן.",
   "metricDescriptions": {
@@ -36,15 +36,6 @@
       "url": "https://www.ynet.co.il/economy/article/s1wp0kjtbl",
       "alwaysVisible": false,
       "color": "#ef4444"
-    },
-    {
-      "id": "trump_sanctions_relief",
-      "date": "2026-03-10T00:00:00Z",
-      "title": "טראמפ מקל חלק מהסנקציות",
-      "description": "טראמפ מודיע על הקלה זמנית בסנקציות על מדינות מייצרות נפט כדי להוריד מחירים.",
-      "url": "https://www.ynet.co.il/news/article/hkj88tny11l",
-      "alwaysVisible": false,
-      "color": "#3b82f6"
     },
     {
       "id": "south_pars",
