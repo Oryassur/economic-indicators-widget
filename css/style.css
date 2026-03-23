@@ -222,7 +222,20 @@ footer {
     padding: 0.75rem;
     z-index: 10;
     box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-    pointer-events: none;
+    pointer-events: auto;
+}
+
+.popup-link {
+    display: inline-block;
+    margin-top: 0.4rem;
+    font-size: 0.8rem;
+    color: #60a5fa;
+    text-decoration: none;
+    pointer-events: auto;
+}
+
+.popup-link:hover {
+    text-decoration: underline;
 }
 
 .popup-header {

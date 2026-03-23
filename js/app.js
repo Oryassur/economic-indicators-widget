@@ -291,14 +291,22 @@ function filterData(dataPoints) {
 
 // --- Popup management ---
 
-function showPopup(canvasXPos, title, description, color) {
+function showPopup(canvasXPos, title, description, color, url) {
     const popup = document.getElementById('annotationPopup');
     const wrapper = document.querySelector('.chart-wrapper');
     const canvas = document.getElementById('mainChart');
+    const link = document.getElementById('popupLink');
 
     document.getElementById('popupTitle').textContent = title;
     document.getElementById('popupTitle').style.color = color || '#e4e4e7';
     document.getElementById('popupDesc').textContent = description;
+
+    if (url) {
+        link.href = url;
+        link.style.display = 'inline-block';
+    } else {
+        link.style.display = 'none';
+    }
 
     popup.style.display = 'block';
 
@@ -343,9 +351,9 @@ function setupCanvasEvents() {
 
         if (found && hoveredEventId !== found.id) {
             hoveredEventId = found.id;
-            showPopup(found.xPos, found.title, found.description, found.color);
+            showPopup(found.xPos, found.title, found.description, found.color, found.url);
             chart.draw();
-            canvas.style.cursor = found.url ? 'pointer' : 'default';
+            canvas.style.cursor = 'pointer';
         } else if (!found && hoveredEventId) {
             hoveredEventId = null;
             hidePopup();
@@ -354,7 +362,10 @@ function setupCanvasEvents() {
         }
     });
 
-    canvas.addEventListener('mouseleave', () => {
+    canvas.addEventListener('mouseleave', (e) => {
+        // Don't hide if mouse moved to the popup
+        const popup = document.getElementById('annotationPopup');
+        if (e.relatedTarget && popup.contains(e.relatedTarget)) return;
         if (hoveredEventId) {
             hoveredEventId = null;
             hidePopup();
@@ -363,6 +374,18 @@ function setupCanvasEvents() {
         canvas.style.cursor = 'default';
     });
 
+    // Hide popup when mouse leaves the popup itself
+    document.getElementById('annotationPopup').addEventListener('mouseleave', (e) => {
+        const canvas = document.getElementById('mainChart');
+        if (e.relatedTarget === canvas) return; // going back to canvas, let mousemove handle it
+        if (hoveredEventId) {
+            hoveredEventId = null;
+            hidePopup();
+            if (chart) chart.draw();
+        }
+    });
+
+    // Click toggles popup (for mobile tap support)
     canvas.addEventListener('click', (e) => {
         if (!chart) return;
         const rect = canvas.getBoundingClientRect();
@@ -370,8 +393,23 @@ function setupCanvasEvents() {
         const y = e.clientY - rect.top;
 
         const found = isNearFlag(x, y);
-        if (found && found.url) {
-            window.open(found.url, '_blank');
+        if (found) {
+            if (hoveredEventId === found.id) {
+                // Tapping same flag again — hide
+                hoveredEventId = null;
+                hidePopup();
+            } else {
+                hoveredEventId = found.id;
+                showPopup(found.xPos, found.title, found.description, found.color, found.url);
+            }
+            chart.draw();
+        } else {
+            // Tap elsewhere — hide popup
+            if (hoveredEventId) {
+                hoveredEventId = null;
+                hidePopup();
+                chart.draw();
+            }
         }
     });
 }
