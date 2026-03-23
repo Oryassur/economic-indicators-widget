@@ -1,5 +1,5 @@
 {
-  "title": "מלחמת הכלכלה העולמית",
+  "title": "שאגת הארי: מלחמת הכלכלה העולמית",
   "subtitle": "עימות ארה״ב-ישראל / איראן — החל מ-23 בפברואר 2026",
   "description": "מעקב אחר מדדים כלכליים מרכזיים בתקופת העימות בין ארה״ב-ישראל לאיראן.",
   "metricDescriptions": {
@@ -35,7 +35,7 @@
       "description": "״ארצות הברית נמצאת \"הרבה מאוד קדימה\" ביחס ללוח הזמנים הראשוני״",
       "url": "https://www.ynet.co.il/economy/article/s1wp0kjtbl",
       "alwaysVisible": false,
-      "color": "#ef4444"
+      "color": "#f97316"
     },
     {
       "id": "south_pars",
@@ -44,7 +44,7 @@
       "description": "ישראל תוקפת את שדה הגז סאות׳ פארס ומתקן הזיקוק באסלויה — איראן מאיימת לתקוף מתקני נפט במפרץ.",
       "url": "https://www.ynet.co.il/news/article/hj5temoqze",
       "alwaysVisible": false,
-      "color": "#ef4444"
+      "color": "#8b5cf6"
     },
     {
       "id": "trump_ultimatum",
@@ -53,7 +53,7 @@
       "description": "טראמפ דורש מאיראן לפתוח את מצר הורמוז תוך 48 שעות — מאיים להשמיד תחנות כוח.",
       "url": "https://www.ynet.co.il/news/article/bjyxknn5be",
       "alwaysVisible": false,
-      "color": "#f59e0b"
+      "color": "#10b981"
     },
     {
       "id": "ev_1774273620522",
@@ -62,7 +62,7 @@
       "description": "טראמפ: מנהלים מו״מ לסיום הלחימה",
       "url": "https://www.ynet.co.il/news/article/bkc7kjaqwx",
       "alwaysVisible": false,
-      "color": "#ef4444"
+      "color": "#f97316"
     }
   ]
 }
