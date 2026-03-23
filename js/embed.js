@@ -144,14 +144,9 @@ async function loadData() {
 
 async function loadEvents() {
     try {
-        const saved = localStorage.getItem('widget_edits');
-        let data;
-        if (saved) {
-            data = JSON.parse(saved);
-        } else {
-            const resp = await fetch(WIDGET_BASE + 'data/events.json');
-            data = await resp.json();
-        }
+        // Always read from server — editor commits changes to events.json via GitHub API
+        const resp = await fetch(WIDGET_BASE + 'data/events.json');
+        const data = await resp.json();
         events = data.events || [];
         metricDescriptions = data.metricDescriptions || {};
         siteTitle = data.title || '';
