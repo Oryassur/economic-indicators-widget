@@ -49,6 +49,11 @@ h1 {
     font-weight: 700;
     margin-bottom: 0;
     text-align: center;
+    white-space: nowrap;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: clamp(0.9rem, 4.5vw, 1.5rem);
 }
 
 .subtitle {
