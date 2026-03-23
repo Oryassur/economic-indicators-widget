@@ -338,30 +338,31 @@ function setupCanvasEvents() {
     }
 }
 
-// Create invisible DOM tap targets over each flag (works on mobile)
+// Create DOM tap targets using percentage positioning (reliable across devices)
 function updateFlagTapTargets() {
     const wrapper = document.querySelector('.chart-wrapper');
-    const canvas = document.getElementById('mainChart');
-    if (!wrapper || !canvas || !chart) return;
+    if (!wrapper || !chart) return;
 
-    // Remove old targets
     wrapper.querySelectorAll('.flag-tap-target').forEach(el => el.remove());
 
-    const canvasRect = canvas.getBoundingClientRect();
-    const wrapperRect = wrapper.getBoundingClientRect();
-    const canvasLeft = canvasRect.left - wrapperRect.left;
-    const canvasTop = canvasRect.top - wrapperRect.top;
     const xScale = chart.scales.x;
     if (!xScale) return;
 
-    const flagY = canvasTop + xScale.bottom + 4;
+    // Use percentage of wrapper width for X, and bottom offset for Y
+    const wrapperWidth = wrapper.offsetWidth;
+    const canvasEl = document.getElementById('mainChart');
+    const canvasOffsetLeft = canvasEl.offsetLeft;
 
     eventPixelPositions.forEach(ep => {
+        const pxFromWrapperLeft = canvasOffsetLeft + ep.xPos;
+        const pctLeft = (pxFromWrapperLeft / wrapperWidth) * 100;
+
         const btn = document.createElement('div');
         btn.className = 'flag-tap-target';
-        btn.style.cssText = `position:absolute; left:${canvasLeft + ep.xPos - 18}px; top:${flagY - 4}px; width:36px; height:28px; z-index:5; cursor:pointer;`;
+        btn.style.cssText = `position:absolute; left:${pctLeft}%; bottom:6px; width:40px; height:34px; transform:translateX(-50%); z-index:5; cursor:pointer; -webkit-tap-highlight-color:transparent;`;
         btn.addEventListener('click', (e) => {
             e.stopPropagation();
+            e.preventDefault();
             if (hoveredEventId === ep.id) {
                 hoveredEventId = null;
                 hidePopup();

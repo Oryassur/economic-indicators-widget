@@ -159,6 +159,12 @@ h1 {
     padding: 1.25rem;
     height: 420px;
     position: relative;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.container, canvas, .flag-tap-target {
+    -webkit-tap-highlight-color: transparent;
+    outline: none;
 }
 
 #mainChart {
