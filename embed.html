@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>מעקב מדדים כלכליים</title>
+    <title>מלחמת הכלכלה העולמית</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -16,8 +16,7 @@
         <header>
             <div class="header-row">
                 <div class="header-titles">
-                    <h1>מעקב מדדים כלכליים</h1>
-                    <p class="last-updated" id="lastUpdated"></p>
+                    <h1>מלחמת הכלכלה העולמית</h1>
                 </div>
                 <div class="toggle-group" id="timeRange">
                     <button class="toggle-btn active" data-range="all">כל התקופה</button>
@@ -29,7 +28,6 @@
 
         <div class="controls">
             <div class="metric-selector">
-                <h3>בחירת מדדים <span class="hint">(עד 2)</span></h3>
                 <div class="metric-buttons" id="metricButtons"></div>
             </div>
         </div>
@@ -49,7 +47,7 @@
         <div class="metric-descriptions" id="metricDescriptions" dir="rtl"></div>
 
         <footer>
-            <p>מקורות מידע: Yahoo Finance &nbsp;|&nbsp; מתעדכן כל שעה</p>
+            <p>מקורות מידע: Yahoo Finance &nbsp;|&nbsp; <span id="lastUpdated"></span></p>
         </footer>
     </div>
 

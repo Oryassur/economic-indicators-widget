@@ -291,13 +291,19 @@ function filterData(dataPoints) {
 
 // --- Popup management ---
 
-function showPopup(canvasXPos, title, description, color, url) {
+function showPopup(canvasXPos, title, description, color, url, date) {
     const popup = document.getElementById('annotationPopup');
     const wrapper = document.querySelector('.chart-wrapper');
     const canvas = document.getElementById('mainChart');
     const link = document.getElementById('popupLink');
 
-    document.getElementById('popupTitle').textContent = title;
+    let displayTitle = title;
+    if (date) {
+        const d = new Date(date);
+        const dateStr = d.toLocaleDateString('he-IL', { day: 'numeric', month: 'numeric', year: 'numeric', timeZone: IL_TZ });
+        displayTitle = `${title} (${dateStr})`;
+    }
+    document.getElementById('popupTitle').textContent = displayTitle;
     document.getElementById('popupTitle').style.color = color || '#e4e4e7';
     document.getElementById('popupDesc').textContent = description;
 
@@ -342,7 +348,7 @@ function setupCanvasEvents() {
 
         if (found && hoveredEventId !== found.id) {
             hoveredEventId = found.id;
-            showPopup(found.xPos, found.title, found.description, found.color, found.url);
+            showPopup(found.xPos, found.title, found.description, found.color, found.url, found.date);
             chart.draw();
             canvas.style.cursor = 'pointer';
         } else if (!found && hoveredEventId) {
@@ -407,7 +413,7 @@ function updateFlagTapTargets() {
                 hidePopup();
             } else {
                 hoveredEventId = ep.id;
-                showPopup(ep.xPos, ep.title, ep.description, ep.color, ep.url);
+                showPopup(ep.xPos, ep.title, ep.description, ep.color, ep.url, ep.date);
             }
             if (chart) chart.draw();
         });
