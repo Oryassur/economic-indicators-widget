@@ -1,10 +1,10 @@
 // Embed-only widget JS (no editor UI)
 const METRIC_CONFIG = {
-    brent_oil:    { color: '#3b82f6', bg: 'rgba(59,130,246,0.08)' },
-    ta125:        { color: '#10b981', bg: 'rgba(16,185,129,0.08)' },
-    sp500:        { color: '#f59e0b', bg: 'rgba(245,158,11,0.08)' },
-    stoxx600:     { color: '#f97316', bg: 'rgba(249,115,22,0.08)' },
-    asia_pacific: { color: '#8b5cf6', bg: 'rgba(139,92,246,0.08)' },
+    brent_oil:    { color: '#3b82f6', bg: 'rgba(59,130,246,0.08)', short: 'נפט' },
+    ta125:        { color: '#10b981', bg: 'rgba(16,185,129,0.08)', short: 'ת״א-125' },
+    sp500:        { color: '#f59e0b', bg: 'rgba(245,158,11,0.08)', short: 'S&P 500' },
+    stoxx600:     { color: '#f97316', bg: 'rgba(249,115,22,0.08)', short: 'Europe 600' },
+    asia_pacific: { color: '#8b5cf6', bg: 'rgba(139,92,246,0.08)', short: 'APAC' },
 };
 
 const IL_TZ = 'Asia/Jerusalem';
@@ -172,7 +172,7 @@ function renderMetricButtons() {
         const metric = metricsData.metrics[key];
         const btn = document.createElement('button');
         btn.className = 'metric-btn';
-        btn.textContent = metric.name;
+        btn.textContent = METRIC_CONFIG[key].short || metric.name;
         btn.dataset.key = key;
 
         const isActive = selectedMetrics.includes(key);
