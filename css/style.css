@@ -214,7 +214,6 @@ footer {
 /* Annotation popup */
 .annotation-popup {
     position: absolute;
-    bottom: 8px;
     width: 280px;
     background: #1e2130;
     border: 1px solid var(--border);

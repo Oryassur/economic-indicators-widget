@@ -276,10 +276,18 @@ function showPopup(canvasXPos, title, description, color, url) {
     const wrapperRect = wrapper.getBoundingClientRect();
     const canvasRect = canvas.getBoundingClientRect();
     const canvasLeft = canvasRect.left - wrapperRect.left;
+    const canvasTop = canvasRect.top - wrapperRect.top;
     const popupWidth = popup.offsetWidth || 280;
     let left = canvasLeft + canvasXPos - popupWidth / 2;
     left = Math.max(8, Math.min(left, wrapperRect.width - popupWidth - 8));
     popup.style.left = left + 'px';
+
+    if (chart && chart.scales.x) {
+        const flagTop = canvasTop + chart.scales.x.bottom;
+        const popupHeight = popup.offsetHeight || 120;
+        popup.style.top = (flagTop - popupHeight - 4) + 'px';
+        popup.style.bottom = 'auto';
+    }
 }
 
 function hidePopup() {
